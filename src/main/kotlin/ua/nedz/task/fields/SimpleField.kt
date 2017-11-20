@@ -10,8 +10,6 @@ val goal = arrayOf(
 
 val rand = Random(System.currentTimeMillis())
 
-val complexityLevel = 20
-
 val n = 4
 
 class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = DistanceFieldComplexityEvaluator()) : Field {
@@ -41,10 +39,10 @@ class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = D
         val newI = vertical(i)
         val newJ = horizontal(j)
 
-        if (newI !in 0 until n || newJ !in 0 until n)
-            return
-        cells.swap(i, j, newI, newJ)
-        emptyCell = newI to newJ
+        if (newI in 0 until n && newJ in 0 until n) {
+            cells.swap(i, j, newI, newJ)
+            emptyCell = newI to newJ
+        }
     }
 
     override fun isSolved() = cells contentDeepEquals goal
@@ -52,7 +50,7 @@ class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = D
     override fun shuffle() {
         cells = goal.deepArrayCopy()
         emptyCell = n - 1 to n - 1
-        while (complexityEvaluator.complexity(cells) < complexityLevel) {
+        while (complexityEvaluator.complexity(cells) < complexityEvaluator.complexityLevel) {
             when (rand.nextInt(3)) {
                 0 -> up()
                 1 -> down()

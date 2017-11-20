@@ -2,6 +2,8 @@ package ua.nedz.task.fields
 
 class DistanceFieldComplexityEvaluator : FieldComplexityEvaluator {
 
+    override val complexityLevel = 20
+
     override fun complexity(field: Array<IntArray>): Int {
         val n = field.size
         var result = 0

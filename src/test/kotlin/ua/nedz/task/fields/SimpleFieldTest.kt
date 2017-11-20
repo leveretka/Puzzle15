@@ -30,9 +30,11 @@ class SimpleFieldTest {
     @Test
     fun testNotGoingUpWhenImpossible() {
 
-        field.up()
-        field.up()
-        field.up()
+        with(field) {
+            up()
+            up()
+            up()
+        }
 
         val upImpossibleState = field.cells.copyOf()
 
@@ -59,9 +61,11 @@ class SimpleFieldTest {
     @Test
     fun testNotGoingLeftWhenImpossible() {
 
-        field.left()
-        field.left()
-        field.left()
+        with(field) {
+            left()
+            left()
+            left()
+        }
 
         val leftImpossibleState = field.cells.copyOf()
 
@@ -93,15 +97,17 @@ class SimpleFieldTest {
                 intArrayOf(13, 14, 15, 12)
         )
 
-        field.up()
-        field.up()
-        field.up()
-        field.left()
-        field.down()
-        field.down()
-        field.left()
-        field.up()
-        field.right()
+        with(field) {
+            up()
+            up()
+            up()
+            left()
+            down()
+            down()
+            left()
+            up()
+            right()
+        }
 
         field.cells contentEquals expected
         field.isSolved() shouldBe false
@@ -113,7 +119,7 @@ class SimpleFieldTest {
 
         field.shuffle()
         field.isSolved() shouldBe false
-        complexityEvaluator.complexity(field.cells) should beGreaterThanOrEqualTo(complexityLevel)
+        complexityEvaluator.complexity(field.cells) should beGreaterThanOrEqualTo(complexityEvaluator.complexityLevel)
     }
 
     @Test
