@@ -114,15 +114,6 @@ class SimpleFieldTest {
     }
 
     @Test
-    fun testShuffle() {
-        val complexityEvaluator = DistanceFieldComplexityEvaluator()
-
-        field.shuffle()
-        field.isSolved() shouldBe false
-        complexityEvaluator.complexity(field.cells) should beGreaterThanOrEqualTo(complexityEvaluator.complexityLevel)
-    }
-
-    @Test
     fun testReturnCopyOfCells() {
         field.cells shouldNotBe field.currentState()
         field.cells contentEquals field.currentState()

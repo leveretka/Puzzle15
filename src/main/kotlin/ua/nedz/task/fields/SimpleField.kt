@@ -8,15 +8,13 @@ val goal = arrayOf(
         intArrayOf(9, 10, 11, 12),
         intArrayOf(13, 14, 15, 0))
 
-val rand = Random(System.currentTimeMillis())
+val puzzleSize = 4
 
-val n = 4
-
-class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = DistanceFieldComplexityEvaluator()) : Field {
+class SimpleField : Field {
     var cells: Array<IntArray> = goal.deepArrayCopy()
         private set
 
-    private var emptyCell = n - 1 to n - 1
+    private var emptyCell = puzzleSize - 1 to puzzleSize - 1
 
     override fun up() {
         moveEmptyCell({it - 1}, {it})
@@ -39,7 +37,7 @@ class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = D
         val newI = vertical(i)
         val newJ = horizontal(j)
 
-        if (newI in 0 until n && newJ in 0 until n) {
+        if (newI in 0 until puzzleSize && newJ in 0 until puzzleSize) {
             cells.swap(i, j, newI, newJ)
             emptyCell = newI to newJ
         }
@@ -47,21 +45,25 @@ class SimpleField (private val complexityEvaluator: FieldComplexityEvaluator = D
 
     override fun isSolved() = cells contentDeepEquals goal
 
-    override fun shuffle() {
-        cells = goal.deepArrayCopy()
-        emptyCell = n - 1 to n - 1
-        while (complexityEvaluator.complexity(cells) < complexityEvaluator.complexityLevel) {
-            when (rand.nextInt(3)) {
-                0 -> up()
-                1 -> down()
-                2 -> left()
-                3 -> right()
-            }
+    override fun currentState() = cells.deepArrayCopy()
 
-        }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SimpleField
+
+        if (!Arrays.deepEquals(cells, other.cells)) return false
+        if (emptyCell != other.emptyCell) return false
+
+        return true
     }
 
-    override fun currentState() = cells.deepArrayCopy()
+    override fun hashCode(): Int {
+        var result = Arrays.hashCode(cells)
+        result = 31 * result + emptyCell.hashCode()
+        return result
+    }
 
 }
 

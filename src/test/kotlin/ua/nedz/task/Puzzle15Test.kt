@@ -5,21 +5,26 @@ import io.kotlintest.matchers.shouldBe
 import org.junit.Test
 import org.mockito.Mockito.verify
 import ua.nedz.task.fields.Field
+import ua.nedz.task.fields.FieldGenerator
 import ua.nedz.task.fields.goal
 import ua.nedz.task.ui.Command.*
 import ua.nedz.task.ui.Puzzle15UI
 
 class Puzzle15Test {
     private val mockedField: Field = mock {
-        on {currentState()} doReturn goal
+        on{currentState()} doReturn goal
     }
+    private val mockedFieldGenerator: FieldGenerator = mock {
+        on {generate()} doReturn mockedField
+    }
+
     private val mockedUI: Puzzle15UI = mock()
-    private val game = Puzzle15(mockedField, mockedUI)
+    private val game = Puzzle15(mockedFieldGenerator, mockedUI)
 
     @Test
     fun createPuzzle15() {
         game.solved shouldBe false
-        verify(mockedField).shuffle()
+        verify(mockedFieldGenerator).generate()
     }
 
     @Test
@@ -79,7 +84,7 @@ class Puzzle15Test {
 
         verify(mockedUI, times(4)).readCommand()
         verify(mockedUI, times(2)).newGame()
-        verify(mockedField, times(2)).shuffle()
+        verify(mockedFieldGenerator, times(2)).generate()
         verify(mockedUI, times(5)).printField(anyArray())
     }
 

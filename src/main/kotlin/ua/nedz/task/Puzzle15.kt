@@ -1,7 +1,8 @@
 package ua.nedz.task
 
 import ua.nedz.task.fields.Field
-import ua.nedz.task.fields.SimpleField
+import ua.nedz.task.fields.FieldGenerator
+import ua.nedz.task.fields.SimpleFieldGenerator
 import ua.nedz.task.ui.Command
 import ua.nedz.task.ui.Command.*
 import ua.nedz.task.ui.ConsolePuzzle15UI
@@ -11,16 +12,15 @@ fun main(args: Array<String>) {
     Puzzle15().start()
 }
 
-class Puzzle15(private val field: Field = SimpleField(), private val ui: Puzzle15UI = ConsolePuzzle15UI()) {
+class Puzzle15(private val fieldGenerator: FieldGenerator = SimpleFieldGenerator(), private val ui: Puzzle15UI = ConsolePuzzle15UI()) {
 
-    var solved = true
+    var solved = false
         private set
 
     private var exitSent = false
+    private var field: Field = fieldGenerator.generate()
 
     init {
-        solved = false
-        field.shuffle()
         ui.hints()
     }
 
@@ -50,13 +50,13 @@ class Puzzle15(private val field: Field = SimpleField(), private val ui: Puzzle1
             RIGHT -> field.right()
             NEW_GAME -> {
                 ui.newGame()
-                field.shuffle()
+                field = fieldGenerator.generate()
             }
             EXIT -> {
                 ui.exit()
                 exitSent = true
             }
-            else -> {}
+            NONE -> {}
         }
     }
 

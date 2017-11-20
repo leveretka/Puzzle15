@@ -5,20 +5,26 @@ class DistanceFieldComplexityEvaluator : FieldComplexityEvaluator {
     override val complexityLevel = 20
 
     override fun complexity(field: Array<IntArray>): Int {
-        val n = field.size
+        val size = field.size
         var result = 0
-        for (i in 0 until n)
-            for (j in 0 until n) {
-                val value = field[i][j]
-                val target =
-                        if (value == 0)
-                            n - 1 to n - 1
-                        else
-                            (value - 1) / n to (value - 1) % n
+        for (i in 0 until size)
+            for (j in 0 until size) {
+                val currentValue = field[i][j]
+                val targetPosition = calcTargetPosition(currentValue, size)
 
-                result += (target.first - i) * (target.first - i) +
-                        (target.second - j) * (target.second - j)
+                result += calcDistance(targetPosition, i, j)
             }
         return result
+    }
+
+    private fun calcDistance(targetPosition: Pair<Int, Int>, i: Int, j: Int) =
+            (targetPosition.first - i) * (targetPosition.first - i) +
+                    (targetPosition.second - j) * (targetPosition.second - j)
+
+    private fun calcTargetPosition(currentValue: Int, size: Int): Pair<Int, Int> {
+        return if (currentValue == 0)
+            size - 1 to size - 1
+        else
+            (currentValue - 1) / size to (currentValue - 1) % size
     }
 }

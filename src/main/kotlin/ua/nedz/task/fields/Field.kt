@@ -2,7 +2,6 @@ package ua.nedz.task.fields
 
 interface Field {
 
-    fun shuffle()
     fun isSolved() : Boolean
     fun up()
     fun left()
